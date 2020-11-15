@@ -10,7 +10,7 @@ function init(){
         })
     })
     var layer1 = new ol.layer.Tile({
-        //title: "天地图路网1",
+        //title: "天地图路网2",
         source: new ol.source.XYZ({
             url: "http://t4.tianditu.com/DataServer?T=vec_w&x={x}&y={y}&l={z}&tk=49ea1deec0ffd88ef13a3f69987e9a63"
         })
