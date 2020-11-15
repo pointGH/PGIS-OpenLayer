@@ -4,14 +4,13 @@ function init(){
         target:'map',
         view:new ol.View({
             // center:ol.proj.fromLonLat([123,28]),
-
             center:[123,28],
             zoom:7,
             projection: 'EPSG:4326',
         })
     })
     var layer1 = new ol.layer.Tile({
-        //title: "天地图路网",
+        //title: "天地图路网1",
         source: new ol.source.XYZ({
             url: "http://t4.tianditu.com/DataServer?T=vec_w&x={x}&y={y}&l={z}&tk=49ea1deec0ffd88ef13a3f69987e9a63"
         })
