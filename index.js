@@ -4,6 +4,7 @@ function init(){
         target:'map',
         view:new ol.View({
             // center:ol.proj.fromLonLat([123,28]),
+
             center:[123,28],
             zoom:7,
             projection: 'EPSG:4326',
