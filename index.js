@@ -71,6 +71,7 @@ function init(){
     var path = [[123,24],[127,28],[128,29],[127,29],[126,29],[128,23],[128,25],[128,26]];
     var vehiclePath = new zyscom.vehiclePath(map,path,'./img/mark_bs.png','./img/arrow.png',vectorLayer,{speed:2})
     vehiclePath.start();
+    
     // zyscom.setMarkerRotation(marker,180);
     // console.log(zyscom.getMarkerRotation(marker));
     // zyscom.addLineString(source,[[123,23.2],[123.1,23.3],[123.3,23.4],[123.4,23.5]])
