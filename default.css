@@ -1,0 +1,20 @@
+.carStateStop {
+    display: inline-block;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background-color: #c80002;
+    border: 1px solid #fba7a7;
+}
+.carNameShowRD{
+    background: url(http://121.31.6.6:28080/clbs/resources/img/carNameShowRD.svg) no-repeat;
+    width: 98px;
+    height: 42px;
+    line-height: 42px;
+    text-align: center;
+    color: #fff;
+    background-size: 98px 42px;
+    font-size: 12px!important;
+    white-space: nowrap;
+    word-wrap: normal;
+}

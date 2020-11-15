@@ -1,0 +1,179 @@
+var map
+function init(){
+    map = new ol.Map({
+        target:'map',
+        view:new ol.View({
+            // center:ol.proj.fromLonLat([123,28]),
+            center:[123,28],
+            zoom:7,
+            projection: 'EPSG:4326',
+        })
+    })
+    map.addLayer(baseXYZLayer());
+    // map.addLayer(OSMLayer())
+    var source = new ol.source.Vector({})
+    var vectorLayer = new ol.layer.Vector({
+        source:source
+    })
+    map.addLayer(vectorLayer);
+    // vectorLayer
+    // addMarker(source,123,28,'http://127.0.0.1:5500/img/mark_bs.png');
+    // addLineString(source,[[123,23.2],[123.1,23.3],[123.3,23.4],[123.4,23.5]])
+    // addCircle(source,123,28,300000)
+    addPolygon(source,[[[125,23.2],[123.1,23.3],[123.3,23.4],[123.4,23.5],[125,23.2]]]);
+}
+
+/**XYZ底图**/
+function baseXYZLayer(){
+    var layer = new ol.layer.Tile({
+        source:new ol.source.XYZ({
+            url:'https://server.arcgisonline.com/ArcGIS/rest/services/' +
+            'World_Topo_Map/MapServer/tile/{z}/{y}/{x}',
+        })
+    })
+    return layer;
+}
+
+/**opemstreetmap底图**/
+function OSMLayer(){
+    var layer = new ol.layer.Tile({
+        preload: 4,
+        source: new ol.source.OSM()
+    })
+    return layer;
+}
+
+/**添加标注
+ * @param {*vector source} source 
+ * @param {*经度 Number} lng 
+ * @param {*纬度 Number} lat 
+ * @param {*图片地址} src 
+ */
+function addMarker(source,lng,lat,src){
+    var marker = new ol.Feature({
+        // geometry: new ol.geom.Point(ol.proj.fromLonLat([lng,lat])),
+        geometry: new ol.geom.Point([lng,lat]),
+    });
+    //设置点标记样式
+    var style = new ol.style.Style({
+        image: new ol.style.Icon({
+            src: src,
+            // anchor: [0,0], //点标记偏移,
+            imgSize:[19,33]
+        }),
+        // zIndex: 999
+    });
+    marker.setStyle(style);
+    source.addFeature(marker);
+    return marker;
+}
+
+/**添加线
+ * @param {* vector source} source 
+ * @param {*坐标数组格式[[lng,lat],[lng,lat]]} coordinates 
+ * @param {*} param 
+ */
+function addLineString(source,coordinates,param){
+    // coordinates = [[123,23.2],[123.1,23.3],[123.3,23.4],[123.4,23.5]]
+    var line = new ol.geom.LineString(coordinates);
+    var feature = new ol.Feature({
+        geometry: line
+    });
+    //可选参数
+    var color = (param!=undefined && param.color!=undefined)?param.color:'#3399CC';
+    var width = (param!=undefined && param.width!=undefined)?param.width:1.5;
+
+    var stroke = new ol.style.Stroke({
+        color: color,
+        width: width
+    });
+
+    var style = new ol.style.Style({
+        stroke: stroke
+    })
+    feature.setStyle(style);
+    source.addFeature(feature);
+    return feature;
+}
+
+/**
+ * 添加圆
+ * @param {*vectorSource} source 
+ * @param {*经度 Number} lng 
+ * @param {*纬度 Number} lat 
+ * @param {*单位为米} radius 
+ */
+function addCircle(source,lng,lat,radius){
+    var circleIn3857 = new ol.geom.Circle(ol.proj.transform([lng,lat], 'EPSG:4326', 'EPSG:3857'), radius,'XY');
+    var circleIn4326 = circleIn3857.transform('EPSG:3857','EPSG:4326');
+    var style = new ol.style.Style({
+        fill:new ol.style.Fill({
+            color:'rgba(238,34,0,0.35)'
+        }),
+        stroke:new ol.style.Stroke({
+            width:3,
+            color:'rgba(255,51,51,1)'
+        })
+    })
+    var feature = new ol.Feature({
+        geometry:circleIn4326
+    })
+    feature.setStyle(style);
+    source.addFeature(feature);
+    return feature;
+}
+
+/**添加多边形
+ * @param {*vectorSource} source 
+ * @param {*数组格式 [[[lng,lat],[lng,lat]]] } coordinates 3层[]记住
+ */
+function addPolygon(source,coordinates){
+    //coordinates = [[[125,23.2],[123.1,23.3],[123.3,23.4],[123.4,23.5],[125,23.2]]]
+    var polygon  = new ol.geom.Polygon(coordinates,'XY');
+    var feature = new ol.Feature({
+        geometry: polygon
+    });
+
+    var stroke = new ol.style.Stroke({
+        color: "rgba(255,51,255,1)",
+        width: 3
+    });
+    var fill = new ol.style.Fill({
+        color:'rgba(23,145,252,0.35)'
+    })
+    var style = new ol.style.Style({
+        stroke:stroke,
+        fill:fill
+    })
+    feature.setStyle(style);
+    source.addFeature(feature);
+    return feature;
+}
+
+/**添加矩形
+ * @param {*vectorSource} source 
+ * @param {*数组格式  [[[lng,lat],[lng,lat],[lng,lat],[lng,lat]]] } coordinates 3层[]记住
+ */
+function addRectangle(source,coordinates){
+    //coordinates = [[[125,23.2],[123.1,23.3],[123.3,23.4],[123.4,23.5]]]
+    var polygon  = new ol.geom.Polygon(coordinates,'XY');
+    var feature = new ol.Feature({
+        geometry: polygon
+    });
+
+    var stroke = new ol.style.Stroke({
+        color: "rgba(255,51,255,1)",
+        width: 3
+    });
+    var fill = new ol.style.Fill({
+        color:'rgba(23,145,252,0.35)'
+    })
+    var style = new ol.style.Style({
+        stroke:stroke,
+        fill:fill
+    })
+    feature.setStyle(style);
+    source.addFeature(feature);
+    return feature;
+}
+
